@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitManager Pro Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0969da;
+            --secondary: #6e7781;
+            --success: #1a7f37;
+            --danger: #cf222e;
+            --card-bg: #ffffff;
+            --body-bg: #f6f8fa;
+            --border: #d0d7de;
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--body-bg); color: #1f2328; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
+
+        /* Top Bar & Input Section */
+        .glass-header { background: white; border: 1px solid var(--border); padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .search-area { position: relative; max-width: 800px; margin: 20px auto; display: flex; gap: 12px; }
+        
+        .input-box { position: relative; flex-grow: 1; }
+        input[type="url"] { width: 100%; padding: 14px 45px 14px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; transition: 0.2s; box-sizing: border-box; }
+        input[type="url"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1); }
+        
+        #clear-txt-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: none; background: none; color: #afb8c1; cursor: pointer; display: none; font-size: 20px; }
+        #clear-txt-btn:hover { color: var(--danger); }
+
+        /* Control Buttons */
+        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); display: inline-flex; align-items: center; gap: 8px; transition: 0.1s; }
+        .btn-preview { background: var(--success); color: white; border: none; }
+        .btn-preview:hover { background: #1a7f37; }
+        .btn-tool { background: white; color: var(--secondary); }
+        .btn-tool:hover { background: #f3f4f6; color: var(--primary); }
+
+        /* Repository Grid */
+        .repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+        .repo-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; transition: 0.3s; }
+        .repo-card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2); }
+        
+        .repo-info { flex-grow: 1; }
+        .repo-name { font-size: 18px; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .repo-url { font-size: 12px; color: var(--secondary); word-break: break-all; margin: 10px 0; display: block; height: 32px; overflow: hidden; }
+        
+        .repo-stats { display: flex; gap: 15px; margin: 15px 0; font-size: 13px; color: #57606a; }
+        .repo-actions { display: flex; justify-content: space-between; border-top: 1px solid #f0f2f5; padding-top: 15px; }
+        
+        .action-link { text-decoration: none; color: var(--secondary); font-size: 13px; font-weight: 600; cursor: pointer; background: none; border: none; padding: 0; }
+        .action-link:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="glass-header">
+        <h1><i class="fa-solid fa-layer-group"></i> GitManager Pro</h1>
+        <div class="search-area">
+            <div class="input-box">
+                <input type="url" id="gh-url" placeholder="Paste GitHub HTML URL..." oninput="checkInput()">
+                <button id="clear-txt-btn" onclick="clearInput()"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+            <button class="btn btn-preview" onclick="runPreview()">
+                <i class="fa-solid fa-bolt"></i> Preview
+            </button>
+        </div>
+        <div class="controls">
+            <button class="btn btn-tool" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Backup JSON</button>
+            <button class="btn btn-tool" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-file-import"></i> Restore</button>
+            <button class="btn btn-tool" style="color:var(--danger)" onclick="clearStorage()"><i class="fa-solid fa-trash-can"></i> Wipe History</button>
+            <input type="file" id="importFile" style="display:none" onchange="importData(this)">
+        </div>
+    </div>
+
+    <div id="history" class="repo-grid"></div>
+</div>
+
+<script src="preview.js"></script>
+</body>
+</html>
